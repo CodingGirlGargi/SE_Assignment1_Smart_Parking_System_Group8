@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+  body {
+    background-color: #fff7cc;
+  }
+
+  .login-container {
+    width: 360px;
+    margin: 80px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #4caf50;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  button:hover {
+    background-color: #43a047;
+  }
+
+  .back-container {
+    margin-top: 20px;
+  }
+
+  .back-link {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #43a047;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<div class="login-container">
+  <h2>Ground Admin Login</h2>
+
+  <form method="POST">
+    <label>Admin ID</label>
+    <input type="number" name="admin_id" required />
+
+    <label>Admin Name</label>
+    <input type="text" name="admin_name" required />
+
+    <label>Password</label>
+    <input type="password" name="admin_password" required />
+
+    <label>Ground ID</label>
+    <input type="number" name="ground_id" required />
+
+    <button type="submit">Enter</button>
+  </form>
+
+  <div class="back-container">
+    <a href="/" class="back-link"> ← Back to Dashboard </a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+  body {
+    background-color: #fff7cc;
+  }
+
+  .container {
+    width: 720px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    color: #4caf50;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .booking-table th,
+  .booking-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .booking-table th {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .booking-table tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .center-text {
+    text-align: center;
+    margin: 20px 0;
+    font-weight: 500;
+    color: #e74c3c;
+  }
+
+  .back-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  .back-btn {
+    padding: 10px 25px;
+    background-color: #43a047;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+</style>
+
+<div class="container">
+  <h2>Past Bookings</h2>
+
+  {% if past_bookings %}
+  <table class="booking-table">
+    <thead>
+      <tr>
+        <th>Ground ID</th>
+        <th>Slot ID</th>
+        <th>Vehicle Number</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in past_bookings %}
+      <tr>
+        <td>{{ b.ground_id }}</td>
+        <td>{{ b.slot_id }}</td>
+        <td>{{ b.vehicle_number }}</td>
+        <td>{{ b.start_time | format_datetime }}</td>
+        <td>{{ b.end_time | format_datetime }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+  <p class="center-text">User has no past bookings</p>
+  {% endif %}
+
+  <div class="back-container">
+    <a href="{{ url_for('user_routes.user_dashboard') }}" class="back-btn">
+      Back to User Dashboard
+    </a>
+  </div>
+</div>
+
+{% endblock %}

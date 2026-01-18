@@ -1,0 +1,136 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+  body {
+    background-color: #fff7cc;
+  }
+
+  .container {
+    width: 500px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    text-align: center;
+    color: #4caf50;
+    margin-bottom: 20px;
+  }
+
+  .vehicle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .vehicle:last-child {
+    border-bottom: none;
+  }
+
+  .remove-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .remove-btn:hover {
+    background-color: #c0392b;
+  }
+
+  .register-form {
+    margin-top: 25px;
+    text-align: center;
+  }
+
+  input[type="text"] {
+    padding: 8px;
+    width: 70%;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  .register-btn {
+    padding: 8px 15px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .register-btn:hover {
+    background-color: #43a047;
+  }
+
+  .limit-msg {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .back-container {
+    margin-top: 30px;
+    text-align: center;
+  }
+
+  .back-btn {
+    padding: 10px 25px;
+    background-color: #43a047;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .back-btn:hover {
+    background-color: #43a047;
+  }
+</style>
+
+<div class="container">
+  <h2>My Vehicles</h2>
+
+  <!-- Registered Vehicles -->
+  {% if vehicles %} {% for v in vehicles %}
+  <div class="vehicle">
+    <span>{{ v.vehicle_number }} (ID: {{ v.vehicle_id }})</span>
+    <form method="POST" action="/remove_vehicle/{{ v.vehicle_id }}">
+      <button class="remove-btn" type="submit">Remove</button>
+    </form>
+  </div>
+  {% endfor %} {% else %}
+  <p style="text-align: center">No vehicles registered</p>
+  {% endif %}
+
+  <!--  Register New Vehicle -->
+  {% if vehicles|length >= 3 %}
+  <div class="limit-msg">Maximum vehicle registration limit reached</div>
+  {% else %}
+  <form class="register-form" method="POST">
+    <input
+      type="text"
+      name="vehicle_number"
+      placeholder="Enter vehicle number"
+      required
+    />
+    <button class="register-btn" type="submit">Register</button>
+  </form>
+  {% endif %}
+
+  <div class="back-container">
+    <a href="/user_dashboard">
+      <button class="back-btn">Back to User Dashboard</button>
+    </a>
+  </div>
+</div>
+
+{% endblock %}

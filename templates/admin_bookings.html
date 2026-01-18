@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+  body {
+    background-color: #fff7cc;
+  }
+
+  table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 80%;
+    background: white;
+  }
+
+  th,
+  td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+
+  th {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .logout {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  .logout button {
+    padding: 10px 20px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .section-gap {
+    margin-top: 40px;
+  }
+</style>
+
+<h2>Current Bookings for Ground {{ ground_id }}</h2>
+
+{% if current_bookings %}
+<table>
+  <tr>
+    <th>User ID</th>
+    <th>Vehicle ID</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+  </tr>
+
+  {% for b in current_bookings %}
+  <tr>
+    <td>{{ b.user_id }}</td>
+    <td>{{ b.vehicle_id }}</td>
+    <td>{{ b.start_time | format_datetime }}</td>
+    <td>{{ b.end_time | format_datetime}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% else %}
+<p style="text-align: center; color: red">
+  No current booking made on this ground
+</p>
+{% endif %}
+
+<div class="section-gap"></div>
+
+<h2>Past Bookings for Ground {{ ground_id }}</h2>
+
+{% if past_bookings %}
+<table>
+  <tr>
+    <th>User ID</th>
+    <th>Vehicle ID</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+  </tr>
+
+  {% for pb in past_bookings %}
+  <tr>
+    <td>{{ pb.user_id }}</td>
+    <td>{{ pb.vehicle_id }}</td>
+    <td>{{ pb.start_time | format_datetime}}</td>
+    <td>{{ pb.end_time | format_datetime}}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% else %}
+<p style="text-align: center; color: red">No past bookings for this ground</p>
+{% endif %}
+
+<div class="logout">
+  <a href="/admin_logout">
+    <button>Logout</button>
+  </a>
+</div>
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+  body {
+    background-color: #fff7cc;
+  }
+
+  .dashboard-container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 20px;
+    text-align: center;
+  }
+
+  h2 {
+    color: #4caf50;
+    margin-bottom: 5px;
+  }
+
+  .user-id {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 40px;
+  }
+
+  .cards {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+    flex-wrap: wrap;
+  }
+
+  .card {
+    flex: 1;
+    min-width: 250px;
+    background: white;
+    padding: 40px 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: black;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+  }
+
+  .card h3 {
+    color: #4caf50;
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    color: #555;
+  }
+
+  /* LOGOUT */
+  .logout-container {
+    margin-top: 50px;
+  }
+
+  .logout-btn {
+    padding: 12px 35px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .logout-btn:hover {
+    background-color: #c0392b;
+  }
+</style>
+
+<div class="dashboard-container">
+  <h2>Hi, {{ user_name }}</h2>
+  <div class="user-id">User ID: {{ user_id }}</div>
+
+  <div class="cards">
+    <!-- My Vehicles -->
+    <a href="/user_vehicles" class="card">
+      <h3>My Vehicles</h3>
+      <p>View and manage your registered vehicles</p>
+    </a>
+
+    <!-- Current Bookings -->
+    <a href="/user_current_bookings" class="card">
+      <h3>My Current Bookings</h3>
+      <p>Check your active parking slots</p>
+    </a>
+
+    <!-- Past Bookings -->
+    <a href="/user_past_bookings" class="card">
+      <h3>My Past Bookings</h3>
+      <p>View your booking history</p>
+    </a>
+  </div>
+
+  <!-- Logout -->
+  <div class="logout-container">
+    <a href="/user_logout">
+      <button class="logout-btn">Logout</button>
+    </a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Smart Parking</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Flash message styling */
+      .flash-messages {
+        list-style: none;
+        padding: 0;
+        margin: 20px;
+        text-align: center;
+      }
+
+      .flash-messages li {
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        font-weight: bold;
+      }
+
+      .success {
+        background-color: #c8e6c9;
+        color: #256029;
+      }
+
+      .warning {
+        background-color: orange;
+        color: #856404;
+      }
+
+      .error {
+        background-color: #f8d7da;
+        color: #842029;
+      }
+    </style>
+  </head>
+
+  <body>
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <ul class="flash-messages" id="flash-messages">
+      {% for category, message in messages %}
+      <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %} {% endwith %} {% block content %}{% endblock %}
+
+    <script>
+      setTimeout(function () {
+        const flashes = document.getElementById("flash-messages");
+        if (flashes) {
+          flashes.style.opacity = "0";
+          setTimeout(() => flashes.remove(), 500);
+        }
+      }, 3000); // 3 seconds
+    </script>
+  </body>
+</html>

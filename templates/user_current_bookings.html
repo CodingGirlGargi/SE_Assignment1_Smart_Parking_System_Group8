@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+  body {
+    background-color: #fff7cc;
+  }
+
+  .container {
+    width: 720px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  h2,
+  h3 {
+    color: #4caf50;
+    text-align: center;
+  }
+
+  hr {
+    margin: 25px 0;
+  }
+
+  select {
+    padding: 8px;
+    margin: 6px 4px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin: 6px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  button {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .green {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .red {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  .orange {
+    background-color: orange;
+    color: white;
+  }
+
+  button:disabled {
+    opacity: 0.85;
+    cursor: not-allowed;
+  }
+
+  .center-text {
+    text-align: center;
+    margin: 10px 0;
+    font-weight: 500;
+  }
+
+  /* Booking table styles (unchanged) */
+  .booking-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+
+  .booking-table th,
+  .booking-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .booking-table th {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  .booking-table tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  .booking-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+  }
+
+  .booking-row select {
+    min-width: 150px;
+  }
+  .back-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.back-btn {
+  padding: 10px 25px;
+  background-color: #43a047;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+
+</style>
+
+<div class="container">
+  <h2>Current Bookings</h2>
+
+  {% if current_bookings %}
+  <table class="booking-table">
+    <thead>
+      <tr>
+        <th>Booking ID</th>
+        <th>Vehicle Number</th>
+        <th>Ground</th>
+        <th>Slot</th>
+        <th>Start Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in current_bookings %}
+      <tr>
+        <td>{{ b.booking_id }}</td>
+        <td>{{ b.vehicle_number }}</td>
+        <td>{{b.ground_id}}</td>
+        <td>{{ b.slot_name }}</td>
+        <td>{{b.start_time | format_datetime}}</td>
+        <td>
+          <form
+            method="POST"
+            action="{{ url_for('user_bookings.end_booking', booking_id=b.booking_id) }}"
+          >
+            <button class="red">End</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="center-text">No current bookings</p>
+  {% endif %}
+
+  <hr />
+
+  {% if not vehicles and not current_bookings %}
+    <p class="center-text red">No vehicles registered.</p>
+
+  {% elif can_book %}
+    <h3>Make a New Booking</h3>
+
+    <form method="POST" class="booking-row">
+     <select name="vehicle_id" onchange="this.form.submit()" required>
+        <option value="">Vehicle</option>
+        {% for v in vehicles %}
+        <option value="{{ v.vehicle_id }}"
+        {% if v.vehicle_id|string == selected_vehicle_id %}selected{% endif %}>
+        {{ v.vehicle_number }}
+        </option>
+        {% endfor %}
+     </select>
+
+
+      <select name="state" onchange="this.form.submit()">
+        <option value="">State</option>
+        {% for s in states %}
+        <option value="{{ s }}" {% if s == selected_state %}selected{% endif %}>
+          {{ s }}
+        </option>
+        {% endfor %}
+      </select>
+
+      <select name="city" onchange="this.form.submit()">
+        <option value="">City</option>
+        {% for c in cities %}
+        <option value="{{ c }}" {% if c == selected_city %}selected{% endif %}>
+          {{ c }}
+        </option>
+        {% endfor %}
+      </select>
+
+      <select name="locality" onchange="this.form.submit()">
+        <option value="">Locality</option>
+        {% for l in localities %}
+        <option value="{{ l }}" {% if l == selected_locality %}selected{% endif %}>
+          {{ l }}
+        </option>
+        {% endfor %}
+      </select>
+    </form>
+
+  {% else %}
+    <p class="center-text red">
+      Booking limit reached. End an active booking to continue.
+    </p>
+  {% endif %}
+
+  {% if slots %}
+  <h3>Available Slots</h3>
+  {% for s in slots %}
+  <div class="slot">
+    <span>{{ s.slot_name }}</span>
+
+    {% if not s.is_occupied %}
+    <form method="POST" action="/book_slot">
+      <input type="hidden" name="slot_id" value="{{ s.slot_id }}" />
+      <input type="hidden" name="vehicle_id" value="{{ selected_vehicle_id }}" />
+      <button class="green">Book</button>
+    </form>
+
+    {% elif s.booked_by == user_id %}
+    <button class="orange" disabled>Booked by you</button>
+
+    {% else %}
+    <button class="red" disabled>Occupied</button>
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="back-container">
+    <a href="{{ url_for('user_routes.user_dashboard') }}" class="back-btn">
+    Back to User Dashboard
+    </a>
+  </div>
+
+
+</div>
+
+{% endblock %}
