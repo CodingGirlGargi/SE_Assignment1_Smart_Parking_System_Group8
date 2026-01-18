@@ -55,4 +55,3 @@ python app.py
 |      517 | adminHydGurudwara   | adminHydGurudwara   |       401 |
 |      518 | adminWarangalRT     | adminWarangalRT     |       405 |
 
-4. The values in config.py have been set to default. They do not correspond to the actual database connection configurations.
