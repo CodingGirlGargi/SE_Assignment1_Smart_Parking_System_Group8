@@ -16,10 +16,12 @@ git clone https://github.com/CodingGirlGargi/SE_Assignment1_Smart_Parking_System
 
 ```bash
 python -m venv venv
-
+```
+```bash
 # Activate on Windows:
 venv\Scripts\activate
-
+```
+```bash
 # Activate on Unix/MacOS:
 source venv/bin/activate
 ```
